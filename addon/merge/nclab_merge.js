@@ -47,6 +47,9 @@
 
       this.showDifferences = options.showDifferences !== false;
       this.ignoreWhitespaces = options.ignoreWhitespaces === true;
+      if (this.ignoreWhitespaces) {
+        this.diffIW = getDiff(asString(orig), asString(options.value), true);
+      }
       this.forceUpdate = registerUpdate(this);
       setScrollLock(this, true, false);
       registerScroll(this);
@@ -63,7 +66,9 @@
   function ensureDiff(dv) {
     if (dv.diffOutOfDate) {
       dv.diff = getDiff(dv.orig.getValue(), dv.edit.getValue());
-      dv.diffIW = getDiff(dv.orig.getValue(), dv.edit.getValue(), true);
+      if (dv.ignoreWhitespaces) {
+        dv.diffIW = getDiff(dv.orig.getValue(), dv.edit.getValue(), true);
+      }
       dv.diffOutOfDate = false;
       CodeMirror.signal(dv.edit, "updateDiff", dv.diff);
     }
