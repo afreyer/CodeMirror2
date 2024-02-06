@@ -31,19 +31,20 @@
                 }
 
                 if (stream.peek().match(/\s/)) {
-
-                    if (stream.pos < scopeOffset) {
+                    var column = CodeMirror.countColumn(stream.string, stream.pos, stream.tabSize);
+                    if (column < scopeOffset) {
                         var offsets = Ext.Array.pluck(state.scopes, 'offset');
-                        var currentOffset = offsets.indexOf(stream.pos);
+                        var currentOffset = offsets.indexOf(column);
 
                         if (currentOffset != -1) {
                             stream.next();
                             var indentLevel = (offsets.length - 1 - currentOffset) % INDENT_CLASSES;
                             return CLS + indentLevel;
                         } else {
-                            while (offsets.indexOf(stream.pos) == -1) {
+                            do {
                                 stream.next();
-                            }
+                                column = CodeMirror.countColumn(stream.string, stream.pos, stream.tabSize);
+                            } while (offsets.indexOf(column) == -1)
                             return CLS + "separator";
                         }
                     } else {
