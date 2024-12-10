@@ -48,8 +48,8 @@
   CodeMirror.defineMode("python", function(conf, parserConf) {
     var ERRORCLASS = "error";
 
-    var singleOperators = parserConf.singleOperators || new RegExp("^[\\+\\-\\*/%&|\\^~<>!]");
-    var singleDelimiters = parserConf.singleDelimiters || new RegExp("^[\\(\\)\\[\\]\\{\\}@,:`=;\\.]");
+    var singleOperators = parserConf.singleOperators || new RegExp("^[\\+\\-\\*/%&@|\\^~<>!]");
+    var singleDelimiters = parserConf.singleDelimiters || new RegExp("^[\\(\\)\\[\\]\\{\\},:`=;\\.]");
     var doubleOperators = parserConf.doubleOperators || new RegExp("^((==)|(!=)|(<=)|(>=)|(<>)|(<<)|(>>)|(//)|(\\*\\*))");
     var doubleDelimiters = parserConf.doubleDelimiters || new RegExp("^((\\+=)|(\\-=)|(\\*=)|(%=)|(/=)|(&=)|(\\|=)|(\\^=))");
     var tripleDelimiters = parserConf.tripleDelimiters || new RegExp("^((//=)|(>>=)|(<<=)|(\\*\\*=))");
@@ -252,8 +252,8 @@
       }
 
       // Handle decorators
-      if (current == "@")
-        return stream.match(identifiers, false) ? "meta" : ERRORCLASS;
+      if (current == "@" && stream.match(identifiers, false))
+        return "meta";
 
       if ((style == "variable" || style == "builtin")
           && state.lastStyle == "meta")
